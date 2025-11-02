@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typography Dashboard - Generate CSS Values</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            padding-top: 40px;
+        }
+
+        header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card h2 {
+            margin-bottom: 24px;
+            font-size: 22px;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .label-text {
+            flex: 1;
+        }
+
+        .label-hint {
+            font-size: 12px;
+            color: #718096;
+            font-weight: 500;
+            margin-left: 12px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+
+        input[type="number"]:hover {
+            border-color: #cbd5e0;
+            background: #fff;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        @media (max-width: 600px) {
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f0f1f7;
+            color: #2d3748;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .preview-section {
+            display: none;
+            margin-bottom: 0;
+        }
+
+        .preview-section h3 {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .preview-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .preview-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .preview-column {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .preview-column h4 {
+            margin-bottom: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .preview-item {
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 12px;
+        }
+
+        .preview-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .preview-label {
+            font-size: 11px;
+            color: #718096;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .output-section {
+            display: none;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .output-header h3 {
+            margin: 0;
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .copy-feedback {
+            color: #48bb78;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .output-code {
+            background: #1a202c;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            border: 1px solid #2d3748;
+        }
+
+        .code-content {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+        }
+
+        .output-info {
+            background: linear-gradient(135deg, #e6fffa 0%, #f0f9ff 100%);
+            border-left: 4px solid #667eea;
+            padding: 14px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .token-table-section {
+            display: none;
+        }
+
+        .token-table-section h3 {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        table thead {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+        }
+
+        table th {
+            padding: 14px;
+            text-align: left;
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+
+        table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        table tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        table strong {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .section-show {
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+            padding-bottom: 40px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .local-storage-info {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .error {
+            background: #fed7d7;
+            border: 1px solid #fc8181;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .success {
+            background: #c6f6d5;
+            border: 1px solid #9ae6b4;
+            color: #22543d;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 32px;
+            }
+
+            header p {
+                font-size: 16px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>⚡ Typography Dashboard</h1>
+            <p>Generate hardcoded typography CSS values instantly</p>
+        </header>
+
+        <div class="container">
+            <!-- Left Panel: Controls -->
+            <div class="card">
+                <h2>🎯 Control Variables</h2>
+
+                <div class="local-storage-info">
+                    💾 Your values are automatically saved to your browser
+                </div>
+
+                <div id="error" class="error"></div>
+                <div id="success" class="success"></div>
+
+                <form id="typographyForm">
+                    <div class="form-group">
+                        <label>
+                            <span class="label-text">Min Viewport (rem)</span>
+                            <span class="label-hint">320px default</span>
+                        </label>
+                        <input type="number" id="viewportMin" name="viewportMin" value="32" step="1" min="10" max="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span class="label-text">Max Viewport (rem)</span>
+                            <span class="label-hint">1440px default</span>
+                        </label>
+                        <input type="number" id="viewportMax" name="viewportMax" value="144" step="1" min="50" max="200">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span class="label-text">Type Base Min (rem)</span>
+                            <span class="label-hint">14px default</span>
+                        </label>
+                        <input type="number" id="typeBaseMin" name="typeBaseMin" value="1.4" step="0.1" min="0.8" max="3">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span class="label-text">Type Base Max (rem)</span>
+                            <span class="label-hint">16px default</span>
+                        </label>
+                        <input type="number" id="typeBaseMax" name="typeBaseMax" value="1.6" step="0.1" min="0.8" max="3">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span class="label-text">Type Ratio Mobile</span>
+                            <span class="label-hint">12.5% default</span>
+                        </label>
+                        <input type="number" id="typeRatioMobile" name="typeRatioMobile" value="1.125" step="0.01" min="1.0" max="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <span class="label-text">Type Ratio Desktop</span>
+                            <span class="label-hint">20% default</span>
+                        </label>
+                        <input type="number" id="typeRatioDesktop" name="typeRatioDesktop" value="1.2" step="0.01" min="1.0" max="2">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" id="generateBtn" class="btn-primary">Generate CSS</button>
+                        <button type="button" id="resetBtn" class="btn-secondary">Reset Default</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Panel: Output -->
+            <div class="card">
+                <!-- Preview Section -->
+                <div id="previewSection" class="preview-section">
+                    <h2>👁️ Preview</h2>
+                    <div class="preview-comparison">
+                        <div class="preview-column">
+                            <h4>Before</h4>
+                            <div id="beforePreview"></div>
+                        </div>
+                        <div class="preview-column">
+                            <h4>After</h4>
+                            <div id="afterPreview"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Section -->
+                <div id="outputSection" class="output-section">
+                    <div class="output-header">
+                        <h3>📋 Generated CSS</h3>
+                        <button class="copy-btn" id="copyBtn">Copy CSS</button>
+                        <span id="copyFeedback" class="copy-feedback">✓ Copied!</span>
+                    </div>
+                    <div class="output-code">
+                        <div id="cssOutput" class="code-content"></div>
+                    </div>
+                    <div class="output-info">
+                        <p>✨ Copy the CSS above and paste it in your main styles</p>
+                    </div>
+                </div>
+
+                <!-- Token Table -->
+                <div id="tokenTableSection" class="token-table-section">
+                    <h3>📊 Token Sizes</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Token</th>
+                                <th>Mobile</th>
+                                <th>Desktop</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tokenTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>🚀 Typography Dashboard v1.0 | <a href="https://alifawad.com" target="_blank">Visit Portfolio</a></p>
+        </footer>
+    </div>
+
+    <script>
+        class TypographyCalculator {
+            constructor(config = {}) {
+                this.config = {
+                    viewportMin: 32,
+                    viewportMax: 144,
+                    typeBaseMin: 1.4,
+                    typeBaseMax: 1.6,
+                    typeRatioMobile: 1.125,
+                    typeRatioDesktop: 1.2,
+                    ...config
+                };
+
+                this.tokens = [
+                    'body-xs', 'body-s', 'body-m', 'body-l', 'body-xl',
+                    'title-6', 'title-5', 'title-4', 'title-3', 'title-2', 'title-1'
+                ];
+
+                this.initialize();
+            }
+
+            initialize() {
+                this.calculateMinValues();
+                this.calculateMaxValues();
+            }
+
+            calculateMinValues() {
+                const base = this.config.typeBaseMin;
+                const ratio = this.config.typeRatioMobile;
+
+                this.minValues = {
+                    'body-xs': base / (ratio * ratio),
+                    'body-s': base / ratio,
+                    'body-m': base,
+                    'body-l': base * ratio,
+                    'body-xl': base * Math.pow(ratio, 2),
+                    'title-6': base * Math.pow(ratio, 3),
+                    'title-5': base * Math.pow(ratio, 4),
+                    'title-4': base * Math.pow(ratio, 5),
+                    'title-3': base * Math.pow(ratio, 6),
+                    'title-2': base * Math.pow(ratio, 7),
+                    'title-1': base * Math.pow(ratio, 8),
+                };
+            }
+
+            calculateMaxValues() {
+                const base = this.config.typeBaseMax;
+                const ratio = this.config.typeRatioDesktop;
+
+                this.maxValues = {
+                    'body-xs': base / (ratio * ratio),
+                    'body-s': base / ratio,
+                    'body-m': base,
+                    'body-l': base * ratio,
+                    'body-xl': base * Math.pow(ratio, 2),
+                    'title-6': base * Math.pow(ratio, 3),
+                    'title-5': base * Math.pow(ratio, 4),
+                    'title-4': base * Math.pow(ratio, 5),
+                    'title-3': base * Math.pow(ratio, 6),
+                    'title-2': base * Math.pow(ratio, 7),
+                    'title-1': base * Math.pow(ratio, 8),
+                };
+            }
+
+            calculateFluidValue(minVal, maxVal) {
+                const minPx = minVal * 10;
+                const maxPx = maxVal * 10;
+                const vpMinPx = this.config.viewportMin * 10;
+                const vpMaxPx = this.config.viewportMax * 10;
+
+                const vwPercent = ((maxPx - minPx) * 100) / (vpMaxPx - vpMinPx);
+                const offset = minPx - (vpMinPx / 100) * vwPercent;
+
+                return {
+                    vw: vwPercent.toFixed(3),
+                    offset: offset.toFixed(3)
+                };
+            }
+
+            generateCss() {
+                let css = '';
+
+                this.tokens.forEach(token => {
+                    const minVal = this.minValues[token];
+                    const maxVal = this.maxValues[token];
+                    const fluid = this.calculateFluidValue(minVal, maxVal);
+
+                    const sign = parseFloat(fluid.offset) >= 0 ? '+' : '-';
+                    const offset = Math.abs(parseFloat(fluid.offset));
+
+                    css += `    --${token}: clamp(${minVal.toFixed(3)}rem, ${fluid.vw}vw ${sign} ${offset.toFixed(3)}rem, ${maxVal.toFixed(3)}rem);\n`;
+                });
+
+                return css;
+            }
+
+            getPreviewSizes() {
+                const preview = {};
+
+                this.tokens.forEach(token => {
+                    const minVal = this.minValues[token];
+                    const maxVal = this.maxValues[token];
+
+                    preview[token] = {
+                        mobile: Math.round(minVal * 10),
+                        desktop: Math.round(maxVal * 10)
+                    };
+                });
+
+                return preview;
+            }
+        }
+
+        class Dashboard {
+            constructor() {
+                this.form = document.getElementById('typographyForm');
+                this.generateBtn = document.getElementById('generateBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.copyBtn = document.getElementById('copyBtn');
+
+                this.previewSection = document.getElementById('previewSection');
+                this.outputSection = document.getElementById('outputSection');
+                this.tokenTableSection = document.getElementById('tokenTableSection');
+
+                this.cssOutput = document.getElementById('cssOutput');
+                this.copyFeedback = document.getElementById('copyFeedback');
+
+                this.tokenLabels = {
+                    'body-xs': 'Extra Small',
+                    'body-s': 'Small',
+                    'body-m': 'Medium',
+                    'body-l': 'Large',
+                    'body-xl': 'Extra Large',
+                    'title-6': 'Title 6',
+                    'title-5': 'Title 5',
+                    'title-4': 'Title 4',
+                    'title-3': 'Title 3',
+                    'title-2': 'Title 2',
+                    'title-1': 'Title 1'
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.loadFromStorage();
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                this.generateBtn.addEventListener('click', () => this.generate());
+                this.resetBtn.addEventListener('click', () => this.reset());
+                this.copyBtn.addEventListener('click', () => this.copy());
+            }
+
+            getFormValues() {
+                const values = {};
+                new FormData(this.form).forEach((value, key) => {
+                    values[key] = parseFloat(value);
+                });
+                return values;
+            }
+
+            generate() {
+                const values = this.getFormValues();
+                const calculator = new TypographyCalculator(values);
+                const css = calculator.generateCss();
+
+                this.cssOutput.textContent = css;
+                this.outputSection.classList.add('section-show');
+                this.outputSection.style.display = 'block';
+
+                this.generatePreview(calculator);
+                this.generateTokenTable(calculator);
+
+                this.saveToStorage(values);
+                this.showSuccess('CSS generated successfully!');
+            }
+
+            generatePreview(calculator) {
+                const preview = calculator.getPreviewSizes();
+                let beforeHtml = '';
+                let afterHtml = '';
+
+                calculator.tokens.forEach(token => {
+                    const size = preview[token];
+                    const label = this.tokenLabels[token] || token;
+
+                    beforeHtml += `
+                        <div class="preview-item">
+                            <div class="preview-label">${token}</div>
+                            <div style="font-size: ${size.mobile}px; font-weight: 600; color: #2d3748;">${label}</div>
+                        </div>
+                    `;
+
+                    afterHtml += `
+                        <div class="preview-item">
+                            <div class="preview-label">${token}</div>
+                            <div style="font-size: ${size.desktop}px; font-weight: 600; color: #2d3748;">${label}</div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('beforePreview').innerHTML = beforeHtml;
+                document.getElementById('afterPreview').innerHTML = afterHtml;
+
+                this.previewSection.classList.add('section-show');
+                this.previewSection.style.display = 'block';
+            }
+
+            generateTokenTable(calculator) {
+                const preview = calculator.getPreviewSizes();
+                let html = '';
+
+                calculator.tokens.forEach(token => {
+                    const size = preview[token];
+                    html += `
+                        <tr>
+                            <td><strong>${token}</strong></td>
+                            <td>${size.mobile}px</td>
+                            <td>${size.desktop}px</td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById('tokenTableBody').innerHTML = html;
+                this.tokenTableSection.classList.add('section-show');
+                this.tokenTableSection.style.display = 'block';
+            }
+
+            copy() {
+                const css = this.cssOutput.textContent;
+                navigator.clipboard.writeText(css).then(() => {
+                    this.copyFeedback.style.display = 'inline-block';
+                    setTimeout(() => {
+                        this.copyFeedback.style.display = 'none';
+                    }, 2000);
+                }).catch(err => {
+                    this.showError('Failed to copy to clipboard');
+                });
+            }
+
+            reset() {
+                if (confirm('Reset to default values?')) {
+                    document.getElementById('viewportMin').value = 32;
+                    document.getElementById('viewportMax').value = 144;
+                    document.getElementById('typeBaseMin').value = 1.4;
+                    document.getElementById('typeBaseMax').value = 1.6;
+                    document.getElementById('typeRatioMobile').value = 1.125;
+                    document.getElementById('typeRatioDesktop').value = 1.2;
+
+                    this.previewSection.style.display = 'none';
+                    this.outputSection.style.display = 'none';
+                    this.tokenTableSection.style.display = 'none';
+
+                    localStorage.removeItem('typographyValues');
+                    this.showSuccess('Reset to defaults!');
+                }
+            }
+
+            saveToStorage(values) {
+                localStorage.setItem('typographyValues', JSON.stringify(values));
+            }
+
+            loadFromStorage() {
+                const stored = localStorage.getItem('typographyValues');
+                if (stored) {
+                    const values = JSON.parse(stored);
+                    Object.keys(values).forEach(key => {
+                        const input = document.getElementById(key);
+                        if (input) input.value = values[key];
+                    });
+                }
+            }
+
+            showSuccess(message) {
+                const successEl = document.getElementById('success');
+                successEl.textContent = message;
+                successEl.style.display = 'block';
+                setTimeout(() => {
+                    successEl.style.display = 'none';
+                }, 3000);
+            }
+
+            showError(message) {
+                const errorEl = document.getElementById('error');
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
+                setTimeout(() => {
+                    errorEl.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Initialize dashboard when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new Dashboard();
+        });
+    </script>
+</body>
+</html>
