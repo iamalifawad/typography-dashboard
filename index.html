@@ -167,14 +167,26 @@
             transition: color 0.3s ease;
         }
 
+        /* FORM GRID LAYOUT - 2 COLUMNS */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .form-group {
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .form-group label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 8px;
             font-weight: 600;
             color: #2d3748;
@@ -183,14 +195,14 @@
         }
 
         .label-text {
-            flex: 1;
+            display: block;
+            margin-bottom: 4px;
         }
 
         .label-hint {
             font-size: 12px;
             color: #718096;
             font-weight: 500;
-            margin-left: 12px;
             transition: color 0.3s ease;
         }
 
@@ -691,52 +703,61 @@
                 <div id="success" class="success"></div>
 
                 <form id="typographyForm">
-                    <div class="form-group">
-                        <label>
-                            <span class="label-text">Min Viewport</span>
-                            <span class="label-hint"><span class="viewport-display">320</span>px</span>
-                        </label>
-                        <input type="number" id="viewportMin" name="viewportMin" value="320" step="10" min="200" max="600">
+                    <!-- Viewport Section -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>
+                                <span class="label-text">Min Viewport</span>
+                                <span class="label-hint"><span class="viewport-display">320</span>px</span>
+                            </label>
+                            <input type="number" id="viewportMin" name="viewportMin" value="320" step="10" min="200" max="600">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span class="label-text">Max Viewport</span>
+                                <span class="label-hint"><span class="viewport-display">1440</span>px</span>
+                            </label>
+                            <input type="number" id="viewportMax" name="viewportMax" value="1440" step="10" min="800" max="2560">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>
-                            <span class="label-text">Max Viewport</span>
-                            <span class="label-hint"><span class="viewport-display">1440</span>px</span>
-                        </label>
-                        <input type="number" id="viewportMax" name="viewportMax" value="1440" step="10" min="800" max="2560">
+                    <!-- Type Base Section -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>
+                                <span class="label-text">Type Base Min</span>
+                                <span class="label-hint">Mobile (rem)</span>
+                            </label>
+                            <input type="number" id="typeBaseMin" name="typeBaseMin" value="1.4" step="0.1" min="0.8" max="3">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span class="label-text">Type Base Max</span>
+                                <span class="label-hint">Desktop (rem)</span>
+                            </label>
+                            <input type="number" id="typeBaseMax" name="typeBaseMax" value="1.6" step="0.1" min="0.8" max="3">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>
-                            <span class="label-text">Type Base Min (rem)</span>
-                            <span class="label-hint">Mobile</span>
-                        </label>
-                        <input type="number" id="typeBaseMin" name="typeBaseMin" value="1.4" step="0.1" min="0.8" max="3">
-                    </div>
+                    <!-- Type Ratio Section -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>
+                                <span class="label-text">Type Ratio Mobile</span>
+                                <span class="label-hint">Scaling step</span>
+                            </label>
+                            <input type="number" id="typeRatioMobile" name="typeRatioMobile" value="1.125" step="0.01" min="1.0" max="2">
+                        </div>
 
-                    <div class="form-group">
-                        <label>
-                            <span class="label-text">Type Base Max (rem)</span>
-                            <span class="label-hint">Desktop</span>
-                        </label>
-                        <input type="number" id="typeBaseMax" name="typeBaseMax" value="1.6" step="0.1" min="0.8" max="3">
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            <span class="label-text">Type Ratio Mobile</span>
-                            <span class="label-hint">12.5%</span>
-                        </label>
-                        <input type="number" id="typeRatioMobile" name="typeRatioMobile" value="1.125" step="0.01" min="1.0" max="2">
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            <span class="label-text">Type Ratio Desktop</span>
-                            <span class="label-hint">20%</span>
-                        </label>
-                        <input type="number" id="typeRatioDesktop" name="typeRatioDesktop" value="1.2" step="0.01" min="1.0" max="2">
+                        <div class="form-group">
+                            <label>
+                                <span class="label-text">Type Ratio Desktop</span>
+                                <span class="label-hint">Scaling step</span>
+                            </label>
+                            <input type="number" id="typeRatioDesktop" name="typeRatioDesktop" value="1.2" step="0.01" min="1.0" max="2">
+                        </div>
                     </div>
 
                     <div class="button-group">
@@ -796,7 +817,7 @@
         </div>
 
         <footer>
-            <p>🚀 Typography Dashboard v2.0 | <a href="https://alifawad.com" target="_blank">Visit Portfolio</a></p>
+            <p>🚀 Typography Dashboard v2.1 | <a href="https://alifawad.com" target="_blank">Visit Portfolio</a></p>
         </footer>
     </div>
 
@@ -866,12 +887,28 @@
             }
 
             calculateFluidValue(minVal, maxVal) {
+                // Convert rem to pixels using root font size
                 const minPx = minVal * this.config.rootFontSize;
                 const maxPx = maxVal * this.config.rootFontSize;
+                
+                // Viewport is already in pixels
                 const vpMinPx = this.config.viewportMin;
                 const vpMaxPx = this.config.viewportMax;
 
-                const vwPercent = ((maxPx - minPx) * 100) / (vpMaxPx - vpMinPx);
+                // Calculate the viewport width range
+                const vpRangePx = vpMaxPx - vpMinPx;
+                
+                // Calculate the font size range
+                const fontSizeRangePx = maxPx - minPx;
+                
+                // Calculate vw percentage
+                // vw = (fontSizeRange / vpRange) * 100
+                const vwPercent = (fontSizeRangePx / vpRangePx) * 100;
+                
+                // Calculate the offset (intercept)
+                // At min viewport: size = minPx
+                // size = (vpWidth / 100) * vwPercent + offset
+                // offset = minPx - (vpMinPx / 100) * vwPercent
                 const offset = minPx - (vpMinPx / 100) * vwPercent;
 
                 return {
@@ -997,9 +1034,11 @@
             getFormValues() {
                 const values = {};
                 new FormData(this.form).forEach((value, key) => {
-                    values[key] = key.includes('Root') || key.includes('ratio') || key.includes('Base') 
-                        ? parseFloat(value) 
-                        : parseInt(value);
+                    if (key === 'viewportMin' || key === 'viewportMax') {
+                        values[key] = parseInt(value);
+                    } else {
+                        values[key] = parseFloat(value);
+                    }
                 });
                 values.rootFontSize = parseInt(this.rootFontSizeSelect.value);
                 return values;
