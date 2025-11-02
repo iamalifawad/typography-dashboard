@@ -16,6 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            transition: background 0.3s ease;
         }
 
         .wrapper {
@@ -27,7 +28,88 @@
             text-align: center;
             color: white;
             margin-bottom: 50px;
-            padding-top: 40px;
+            padding-top: 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                justify-content: center;
+                gap: 15px;
+            }
+        }
+
+        .root-font-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .root-font-selector label {
+            white-space: nowrap;
+        }
+
+        .root-font-selector select {
+            padding: 8px 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .root-font-selector select:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .root-font-selector select:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .root-font-selector select option {
+            background: #333;
+            color: white;
+        }
+
+        .dark-mode-btn {
+            padding: 8px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+
+        .dark-mode-btn:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .dark-mode-btn:active {
+            transform: scale(0.95);
         }
 
         header h1 {
@@ -61,6 +143,7 @@
             padding: 32px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             animation: slideUp 0.6s ease-out;
+            transition: background 0.3s ease;
         }
 
         @keyframes slideUp {
@@ -81,6 +164,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            transition: color 0.3s ease;
         }
 
         .form-group {
@@ -95,6 +179,7 @@
             font-weight: 600;
             color: #2d3748;
             font-size: 14px;
+            transition: color 0.3s ease;
         }
 
         .label-text {
@@ -106,6 +191,7 @@
             color: #718096;
             font-weight: 500;
             margin-left: 12px;
+            transition: color 0.3s ease;
         }
 
         input[type="number"] {
@@ -117,6 +203,7 @@
             font-family: inherit;
             transition: all 0.3s ease;
             background: #f7fafc;
+            color: #1a202c;
         }
 
         input[type="number"]:hover {
@@ -172,6 +259,7 @@
         .btn-secondary {
             background: #f0f1f7;
             color: #2d3748;
+            transition: all 0.3s ease;
         }
 
         .btn-secondary:hover {
@@ -205,6 +293,7 @@
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             padding: 20px;
+            transition: all 0.3s ease;
         }
 
         .preview-column h4 {
@@ -265,6 +354,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         .copy-btn:hover {
@@ -292,6 +382,7 @@
             margin-bottom: 16px;
             overflow-x: auto;
             border: 1px solid #2d3748;
+            transition: all 0.3s ease;
         }
 
         .code-content {
@@ -312,6 +403,7 @@
             font-size: 13px;
             color: #2d3748;
             line-height: 1.6;
+            transition: all 0.3s ease;
         }
 
         .token-table-section {
@@ -386,6 +478,7 @@
             padding-bottom: 40px;
             font-size: 13px;
             opacity: 0.8;
+            transition: color 0.3s ease;
         }
 
         footer a {
@@ -401,6 +494,7 @@
             font-size: 12px;
             margin-bottom: 20px;
             opacity: 0.9;
+            transition: all 0.3s ease;
         }
 
         .error {
@@ -411,6 +505,7 @@
             border-radius: 6px;
             margin-bottom: 16px;
             display: none;
+            transition: all 0.3s ease;
         }
 
         .success {
@@ -421,6 +516,134 @@
             border-radius: 6px;
             margin-bottom: 16px;
             display: none;
+            transition: all 0.3s ease;
+        }
+
+        /* DARK MODE STYLES */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .card {
+            background: #2d3748;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .card h2 {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .form-group label {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .label-hint {
+            color: #a0aec0;
+        }
+
+        body.dark-mode input[type="number"] {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode input[type="number"]:hover {
+            background: #2d3748;
+            border-color: #667eea;
+        }
+
+        body.dark-mode input[type="number"]:focus {
+            background: #2d3748;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        body.dark-mode .btn-secondary {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .btn-secondary:hover {
+            background: #667eea;
+        }
+
+        body.dark-mode .preview-column {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .preview-column h4 {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .preview-label {
+            color: #a0aec0;
+        }
+
+        body.dark-mode .preview-item {
+            border-bottom-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .output-code {
+            background: #0f1419;
+            border-color: #2d3748;
+        }
+
+        body.dark-mode .code-content {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .output-info {
+            background: rgba(31, 41, 55, 0.8);
+            border-left-color: #667eea;
+            color: #cbd5e0;
+        }
+
+        body.dark-mode table {
+            border-color: #4a5568;
+        }
+
+        body.dark-mode table thead {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode table th {
+            color: #cbd5e0;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode table td {
+            border-bottom-color: #4a5568;
+            color: #cbd5e0;
+        }
+
+        body.dark-mode table tbody tr:hover {
+            background: #2d3748;
+        }
+
+        body.dark-mode .local-storage-info {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .error {
+            background: #7c2d12;
+            border-color: #dc2626;
+            color: #fca5a5;
+        }
+
+        body.dark-mode .success {
+            background: #1e3a1f;
+            border-color: #22c55e;
+            color: #86efac;
+        }
+
+        body.dark-mode footer {
+            color: #cbd5e0;
         }
 
         @media (max-width: 768px) {
@@ -441,6 +664,16 @@
 <body>
     <div class="wrapper">
         <header>
+            <div class="header-top">
+                <div class="root-font-selector">
+                    <label>Root Font Size:</label>
+                    <select id="rootFontSize">
+                        <option value="16">100% (1rem = 16px)</option>
+                        <option value="10">62.5% (1rem = 10px)</option>
+                    </select>
+                </div>
+                <button id="darkModeToggle" class="dark-mode-btn">🌙 Dark Mode</button>
+            </div>
             <h1>⚡ Typography Dashboard</h1>
             <p>Generate hardcoded typography CSS values instantly</p>
         </header>
@@ -460,24 +693,24 @@
                 <form id="typographyForm">
                     <div class="form-group">
                         <label>
-                            <span class="label-text">Min Viewport (rem)</span>
-                            <span class="label-hint">320px default</span>
+                            <span class="label-text">Min Viewport</span>
+                            <span class="label-hint"><span class="viewport-display">320</span>px</span>
                         </label>
-                        <input type="number" id="viewportMin" name="viewportMin" value="32" step="1" min="10" max="100">
+                        <input type="number" id="viewportMin" name="viewportMin" value="320" step="10" min="200" max="600">
                     </div>
 
                     <div class="form-group">
                         <label>
-                            <span class="label-text">Max Viewport (rem)</span>
-                            <span class="label-hint">1440px default</span>
+                            <span class="label-text">Max Viewport</span>
+                            <span class="label-hint"><span class="viewport-display">1440</span>px</span>
                         </label>
-                        <input type="number" id="viewportMax" name="viewportMax" value="144" step="1" min="50" max="200">
+                        <input type="number" id="viewportMax" name="viewportMax" value="1440" step="10" min="800" max="2560">
                     </div>
 
                     <div class="form-group">
                         <label>
                             <span class="label-text">Type Base Min (rem)</span>
-                            <span class="label-hint">14px default</span>
+                            <span class="label-hint">Mobile</span>
                         </label>
                         <input type="number" id="typeBaseMin" name="typeBaseMin" value="1.4" step="0.1" min="0.8" max="3">
                     </div>
@@ -485,7 +718,7 @@
                     <div class="form-group">
                         <label>
                             <span class="label-text">Type Base Max (rem)</span>
-                            <span class="label-hint">16px default</span>
+                            <span class="label-hint">Desktop</span>
                         </label>
                         <input type="number" id="typeBaseMax" name="typeBaseMax" value="1.6" step="0.1" min="0.8" max="3">
                     </div>
@@ -493,7 +726,7 @@
                     <div class="form-group">
                         <label>
                             <span class="label-text">Type Ratio Mobile</span>
-                            <span class="label-hint">12.5% default</span>
+                            <span class="label-hint">12.5%</span>
                         </label>
                         <input type="number" id="typeRatioMobile" name="typeRatioMobile" value="1.125" step="0.01" min="1.0" max="2">
                     </div>
@@ -501,7 +734,7 @@
                     <div class="form-group">
                         <label>
                             <span class="label-text">Type Ratio Desktop</span>
-                            <span class="label-hint">20% default</span>
+                            <span class="label-hint">20%</span>
                         </label>
                         <input type="number" id="typeRatioDesktop" name="typeRatioDesktop" value="1.2" step="0.01" min="1.0" max="2">
                     </div>
@@ -563,7 +796,7 @@
         </div>
 
         <footer>
-            <p>🚀 Typography Dashboard v1.0 | <a href="https://alifawad.com" target="_blank">Visit Portfolio</a></p>
+            <p>🚀 Typography Dashboard v2.0 | <a href="https://alifawad.com" target="_blank">Visit Portfolio</a></p>
         </footer>
     </div>
 
@@ -571,12 +804,13 @@
         class TypographyCalculator {
             constructor(config = {}) {
                 this.config = {
-                    viewportMin: 32,
-                    viewportMax: 144,
+                    viewportMin: 320,
+                    viewportMax: 1440,
                     typeBaseMin: 1.4,
                     typeBaseMax: 1.6,
                     typeRatioMobile: 1.125,
                     typeRatioDesktop: 1.2,
+                    rootFontSize: 16,
                     ...config
                 };
 
@@ -632,17 +866,17 @@
             }
 
             calculateFluidValue(minVal, maxVal) {
-                const minPx = minVal * 10;
-                const maxPx = maxVal * 10;
-                const vpMinPx = this.config.viewportMin * 10;
-                const vpMaxPx = this.config.viewportMax * 10;
+                const minPx = minVal * this.config.rootFontSize;
+                const maxPx = maxVal * this.config.rootFontSize;
+                const vpMinPx = this.config.viewportMin;
+                const vpMaxPx = this.config.viewportMax;
 
                 const vwPercent = ((maxPx - minPx) * 100) / (vpMaxPx - vpMinPx);
                 const offset = minPx - (vpMinPx / 100) * vwPercent;
 
                 return {
                     vw: vwPercent.toFixed(3),
-                    offset: offset.toFixed(3)
+                    offset: offset.toFixed(3),
                 };
             }
 
@@ -665,14 +899,15 @@
 
             getPreviewSizes() {
                 const preview = {};
+                const rootFontSize = this.config.rootFontSize;
 
                 this.tokens.forEach(token => {
                     const minVal = this.minValues[token];
                     const maxVal = this.maxValues[token];
 
                     preview[token] = {
-                        mobile: Math.round(minVal * 10),
-                        desktop: Math.round(maxVal * 10)
+                        mobile: Math.round(minVal * rootFontSize),
+                        desktop: Math.round(maxVal * rootFontSize)
                     };
                 });
 
@@ -686,6 +921,8 @@
                 this.generateBtn = document.getElementById('generateBtn');
                 this.resetBtn = document.getElementById('resetBtn');
                 this.copyBtn = document.getElementById('copyBtn');
+                this.rootFontSizeSelect = document.getElementById('rootFontSize');
+                this.darkModeToggle = document.getElementById('darkModeToggle');
 
                 this.previewSection = document.getElementById('previewSection');
                 this.outputSection = document.getElementById('outputSection');
@@ -693,6 +930,8 @@
 
                 this.cssOutput = document.getElementById('cssOutput');
                 this.copyFeedback = document.getElementById('copyFeedback');
+                this.viewportMinInput = document.getElementById('viewportMin');
+                this.viewportMaxInput = document.getElementById('viewportMax');
 
                 this.tokenLabels = {
                     'body-xs': 'Extra Small',
@@ -713,6 +952,7 @@
 
             init() {
                 this.loadFromStorage();
+                this.loadDarkMode();
                 this.bindEvents();
             }
 
@@ -720,13 +960,48 @@
                 this.generateBtn.addEventListener('click', () => this.generate());
                 this.resetBtn.addEventListener('click', () => this.reset());
                 this.copyBtn.addEventListener('click', () => this.copy());
+                this.rootFontSizeSelect.addEventListener('change', () => this.handleRootFontSizeChange());
+                this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
+                this.viewportMinInput.addEventListener('input', () => this.updateViewportDisplay());
+                this.viewportMaxInput.addEventListener('input', () => this.updateViewportDisplay());
+            }
+
+            updateViewportDisplay() {
+                const displays = document.querySelectorAll('.viewport-display');
+                if (displays.length >= 2) {
+                    displays[0].textContent = this.viewportMinInput.value;
+                    displays[1].textContent = this.viewportMaxInput.value;
+                }
+            }
+
+            handleRootFontSizeChange() {
+                this.saveToStorage(this.getFormValues());
+                this.showSuccess('Root font size updated!');
+            }
+
+            toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDarkMode);
+                this.darkModeToggle.textContent = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+            }
+
+            loadDarkMode() {
+                const isDarkMode = localStorage.getItem('darkMode') === 'true';
+                if (isDarkMode) {
+                    document.body.classList.add('dark-mode');
+                    this.darkModeToggle.textContent = '☀️ Light Mode';
+                }
             }
 
             getFormValues() {
                 const values = {};
                 new FormData(this.form).forEach((value, key) => {
-                    values[key] = parseFloat(value);
+                    values[key] = key.includes('Root') || key.includes('ratio') || key.includes('Base') 
+                        ? parseFloat(value) 
+                        : parseInt(value);
                 });
+                values.rootFontSize = parseInt(this.rootFontSizeSelect.value);
                 return values;
             }
 
@@ -811,12 +1086,15 @@
 
             reset() {
                 if (confirm('Reset to default values?')) {
-                    document.getElementById('viewportMin').value = 32;
-                    document.getElementById('viewportMax').value = 144;
+                    document.getElementById('viewportMin').value = 320;
+                    document.getElementById('viewportMax').value = 1440;
                     document.getElementById('typeBaseMin').value = 1.4;
                     document.getElementById('typeBaseMax').value = 1.6;
                     document.getElementById('typeRatioMobile').value = 1.125;
                     document.getElementById('typeRatioDesktop').value = 1.2;
+                    document.getElementById('rootFontSize').value = 16;
+
+                    this.updateViewportDisplay();
 
                     this.previewSection.style.display = 'none';
                     this.outputSection.style.display = 'none';
@@ -836,9 +1114,14 @@
                 if (stored) {
                     const values = JSON.parse(stored);
                     Object.keys(values).forEach(key => {
-                        const input = document.getElementById(key);
-                        if (input) input.value = values[key];
+                        if (key === 'rootFontSize') {
+                            this.rootFontSizeSelect.value = values[key];
+                        } else {
+                            const input = document.getElementById(key);
+                            if (input) input.value = values[key];
+                        }
                     });
+                    this.updateViewportDisplay();
                 }
             }
 
