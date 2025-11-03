@@ -7,7 +7,6 @@ class DashboardUI {
     constructor() {
         this.generator = new TokenGenerator();
         this.storage = new StorageManager();
-        this.currentViewport = 320;
         this.generatedData = null;
         
         this.initElements();
@@ -76,11 +75,6 @@ class DashboardUI {
             tab.addEventListener('click', (e) => this.switchPreviewTab(e.target.dataset.tab));
         });
 
-        // Viewport toggle
-        document.querySelectorAll('.viewport-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.switchViewport(e.target.dataset.viewport));
-        });
-
         // Real-time generation on input change
         const inputs = [
             this.elements.viewportMin, this.elements.viewportMax,
@@ -120,30 +114,6 @@ class DashboardUI {
         // Update content visibility
         document.querySelectorAll('.preview-content').forEach(c => c.classList.remove('active'));
         document.getElementById(`${tab}Preview`).classList.add('active');
-    }
-
-    /**
-     * Switch viewport size for preview
-     * @param {String} viewport - Viewport name (mobile, tablet, desktop)
-     */
-    switchViewport(viewport) {
-        // Update viewport buttons
-        document.querySelectorAll('.viewport-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`[data-viewport="${viewport}"]`).classList.add('active');
-
-        // Set viewport width
-        const viewportMap = {
-            mobile: 320,
-            tablet: 768,
-            desktop: 1440
-        };
-
-        this.currentViewport = viewportMap[viewport];
-
-        // Regenerate preview with new viewport
-        if (this.generatedData) {
-            this.updatePreview(this.getConfig(), this.generatedData);
-        }
     }
 
     /**
@@ -202,20 +172,9 @@ class DashboardUI {
      * @param {Object} data - Generated token data
      */
     updatePreview(config, data) {
-        const rootFontSize = config.rootFontSize;
-
         // Typography Preview
         let typographyHTML = '';
         data.typography.tokens.forEach((token, i) => {
-            const actualSize = this.generator.calculateActualSize(
-                data.typography.minValues[i],
-                data.typography.maxValues[i],
-                config.viewportMin,
-                config.viewportMax,
-                this.currentViewport,
-                rootFontSize
-            );
-
             typographyHTML += `
                 <div class="typography-preview-item">
                     <div class="preview-label">${token}</div>
@@ -223,7 +182,6 @@ class DashboardUI {
                         The quick brown fox jumps over the lazy dog
                     </div>
                     <div class="preview-specs">
-                        <span>Actual: ${actualSize}px</span>
                         <span>Min: ${data.typography.minValues[i].toFixed(3)}rem</span>
                         <span>Max: ${data.typography.maxValues[i].toFixed(3)}rem</span>
                     </div>
@@ -235,22 +193,13 @@ class DashboardUI {
         // Spacing Preview
         let spacingHTML = '';
         data.spacing.tokens.forEach((token, i) => {
-            const actualSize = this.generator.calculateActualSize(
-                data.spacing.minValues[i],
-                data.spacing.maxValues[i],
-                config.viewportMin,
-                config.viewportMax,
-                this.currentViewport,
-                rootFontSize
-            );
-
             spacingHTML += `
                 <div class="spacing-preview-item">
                     <div class="spacing-inner" style="padding: var(--${token});">
                         <div>
                             <div style="font-weight: 700; margin-bottom: 0.25rem;">${token}</div>
                             <div style="font-size: 0.875rem; opacity: 0.9;">
-                                Padding: ${actualSize}px
+                                ${data.spacing.minValues[i].toFixed(3)}rem - ${data.spacing.maxValues[i].toFixed(3)}rem
                             </div>
                         </div>
                     </div>
@@ -262,19 +211,10 @@ class DashboardUI {
         // Gap Preview
         let gapHTML = '';
         data.gaps.tokens.forEach((token, i) => {
-            const actualSize = this.generator.calculateActualSize(
-                data.gaps.minValues[i],
-                data.gaps.maxValues[i],
-                config.viewportMin,
-                config.viewportMax,
-                this.currentViewport,
-                rootFontSize
-            );
-
             gapHTML += `
                 <div class="gap-preview-container" style="gap: var(--${token});">
                     <div style="text-align: center; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.5rem;">
-                        ${token} (Gap: ${actualSize}px)
+                        ${token} (${data.gaps.minValues[i].toFixed(3)}rem - ${data.gaps.maxValues[i].toFixed(3)}rem)
                     </div>
                     <div class="gap-preview-item">Item 1</div>
                     <div class="gap-preview-item">Item 2</div>
@@ -287,6 +227,7 @@ class DashboardUI {
 
     /**
      * Apply generated CSS to document for live preview
+     * Note: Root font size only affects generated tokens, not the entire page
      * @param {Object} config - Current configuration
      * @param {Object} typography - Typography token data
      * @param {Object} spacing - Spacing token data
@@ -301,17 +242,17 @@ class DashboardUI {
         const style = document.createElement('style');
         style.id = 'generated-tokens';
         
+        // Important: We don't apply root font size to document
+        // It only affects the calculations and CSS output
+        // The preview uses the generated CSS variables which already
+        // account for the root font size in their calculations
+        
         let cssContent = '';
         
-        // Add root font size if needed
-        if (config.rootFontSize === 10) {
-            cssContent += 'html { font-size: 62.5%; }\n';
-        }
-        
         // Combine all CSS (remove comments and merge :root declarations)
-        cssContent += typography.css.replace(/\/\*.*?\*\/\n*/g, '') + '\n';
-        cssContent += spacing.css.replace(/\/\*.*?\*\/\n*/g, '').replace(':root {', '') + '\n';
-        cssContent += gaps.css.replace(/\/\*.*?\*\/\n*/g, '').replace(':root {', '');
+        cssContent += typography.css.replace(/\/\*.*?\*\/\n*/g, '').replace(/html.*?\n/g, '') + '\n';
+        cssContent += spacing.css.replace(/\/\*.*?\*\/\n*/g, '').replace(':root {', '').replace(/html.*?\n/g, '') + '\n';
+        cssContent += gaps.css.replace(/\/\*.*?\*\/\n*/g, '').replace(':root {', '').replace(/html.*?\n/g, '');
         
         style.textContent = cssContent;
         document.head.appendChild(style);

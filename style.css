@@ -1,37 +1,44 @@
 /* ============================================
-   CSS VARIABLES
+   CSS VARIABLES - Claude.ai Branding
    ============================================ */
 
 :root {
+    /* Claude.ai Light Mode Colors */
     --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --text-tertiary: #94a3b8;
-    --accent: #3b82f6;
-    --accent-hover: #2563eb;
-    --border: #e2e8f0;
-    --border-hover: #cbd5e1;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --shadow: rgba(15, 23, 42, 0.08);
+    --bg-secondary: #f5f5f5;
+    --bg-tertiary: #e8e8e8;
+    --text-primary: #2d2d2d;
+    --text-secondary: #686868;
+    --text-tertiary: #8e8e8e;
+    --accent: #cc785c;
+    --accent-hover: #b76a4f;
+    --border: #d4d4d4;
+    --border-hover: #b8b8b8;
+    --success: #2d9f6e;
+    --warning: #d97706;
+    --shadow: rgba(0, 0, 0, 0.08);
+    
+    /* Claude.ai Typography */
+    --font-display: ui-serif, "Charter", Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
 }
 
 body.dark-mode {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #262626;
-    --bg-tertiary: #2d2d2d;
-    --text-primary: #ececf1;
-    --text-secondary: #9299a4;
-    --text-tertiary: #6b7280;
-    --accent: #5b9fff;
-    --accent-hover: #4a8eee;
-    --border: #3f3f46;
-    --border-hover: #52525b;
-    --success: #10b981;
+    /* Claude.ai Dark Mode Colors */
+    --bg-primary: #1f1f1f;
+    --bg-secondary: #2a2a2a;
+    --bg-tertiary: #3a3a3a;
+    --text-primary: #ececec;
+    --text-secondary: #b4b4b4;
+    --text-tertiary: #8e8e8e;
+    --accent: #d4886d;
+    --accent-hover: #e09980;
+    --border: #404040;
+    --border-hover: #565656;
+    --success: #3fb584;
     --warning: #f59e0b;
-    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow: rgba(0, 0, 0, 0.4);
 }
 
 /* ============================================
@@ -45,7 +52,7 @@ body.dark-mode {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-family: var(--font-body);
     background: var(--bg-primary);
     color: var(--text-primary);
     padding: 1.5rem;
@@ -80,7 +87,8 @@ header {
 
 .header-title h1 {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 700;
+    font-weight: 600;
+    font-family: var(--font-display);
     color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
@@ -478,7 +486,7 @@ button:active {
     margin-top: 0.5rem;
     font-size: 0.75rem;
     color: var(--text-tertiary);
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-mono);
 }
 
 /* ============================================
@@ -610,7 +618,7 @@ pre {
 
 code {
     color: var(--text-primary);
-    font-family: 'Fira Code', 'Courier New', monospace;
+    font-family: var(--font-mono);
 }
 
 /* ============================================
