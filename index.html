@@ -3,1079 +3,638 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typography Dashboard - Generate CSS Values</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Design System Token Generator</title>
     <style>
-/* ═══════════════════════════════════════════════════════════════════════════
-   MODERN DASHBOARD - MINIMAL & CLEAN DESIGN
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    /* Light Mode Colors */
-    --primary: #0f172a;
-    --secondary: #1e293b;
-    --accent: #3b82f6;
-    --accent-dark: #1e40af;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --border: #e2e8f0;
-    --bg: #ffffff;
-    --bg-alt: #f8fafc;
-    --success: #10b981;
-    --error: #ef4444;
-}
-
-body {
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    color: var(--text-primary);
-    min-height: 100vh;
-    padding: 40px 20px;
-    font-size: 16px;
-    line-height: 1.6;
-    letter-spacing: 0.3px;
-}
-
-.wrapper {
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   HEADER & NAVIGATION
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-header {
-    margin-bottom: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-header h1 {
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--primary);
-    font-family: 'Manrope', sans-serif;
-}
-
-/* Add Manrope to all headings */
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Manrope', sans-serif;
-}
-
-.card h2 {
-    font-family: 'Manrope', sans-serif;
-    font-weight: 700;
-}
-
-header p {
-    font-size: 15px;
-    color: var(--text-secondary);
-    font-weight: 500;
-    margin: 0;
-}
-
-.header-top {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-}
-
-.root-font-selector {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.root-font-selector label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-secondary);
-}
-
-.root-font-selector select,
-select {
-    padding: 10px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: white;
-    color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-
-.root-font-selector select:hover,
-select:hover {
-    border-color: var(--accent-light);
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-}
-
-.root-font-selector select:focus,
-select:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-}
-
-.dark-mode-btn {
-    padding: 10px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: white;
-    color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    font-family: inherit;
-}
-
-.dark-mode-btn:hover {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: white;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   MAIN LAYOUT - 2x2 GRID
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 60px;
-    padding: 0 40px;
-}
-
-/* Grid items automatically flow into 2x2 layout */
-.card {
-    /* Will be: 1 = top-left, 2 = top-right, 3 = bottom-left, 4 = bottom-right */
-}
-
-/* Remove old row styles */
-.row-top,
-.row-bottom {
-    display: contents; /* Remove wrapper, children flow into parent grid */
-}
-
-@media (max-width: 1200px) {
-    .container {
-        gap: 32px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .container {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   CARDS
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.card {
-    background: white;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: var(--shadow);
-    animation: slideUp 0.4s ease-out;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-    border: 1px solid rgba(226, 232, 240, 0.6);
-}
-
-.card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .card {
-        padding: 32px 24px;
-    }
-}
-
-.card h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    letter-spacing: -0.3px;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   FORM ELEMENTS
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.local-storage-info {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    color: var(--text-secondary);
-    padding: 14px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 28px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    margin-bottom: 32px;
-}
-
-@media (max-width: 600px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: var(--text-primary);
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.label-text {
-    display: block;
-}
-
-.label-hint {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: 0.3px;
-}
-
-input[type="number"] {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
-    transition: all 0.2s ease;
-    background: white;
-    color: var(--text-primary);
-    font-weight: 500;
-}
-
-input[type="number"]:hover {
-    border-color: var(--accent-light);
-    background: #f8fafc;
-}
-
-input[type="number"]:focus {
-    outline: none;
-    border-color: var(--accent);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-}
-
-input[type="number"]::placeholder {
-    color: var(--text-muted);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   BUTTONS
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.button-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 36px;
-}
-
-@media (max-width: 600px) {
-    .button-group {
-        grid-template-columns: 1fr;
-    }
-}
-
-button {
-    padding: 14px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
-    letter-spacing: 0.3px;
-}
-
-.btn-primary {
-    background: var(--accent);
-    color: white;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-}
-
-.btn-primary:hover {
-    background: #2563eb;
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-    transform: translateY(-1px);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
-}
-
-.btn-secondary {
-    background: var(--bg-light);
-    color: var(--text-primary);
-    border: 1.5px solid var(--border);
-}
-
-.btn-secondary:hover {
-    background: #f1f5f9;
-    border-color: var(--accent);
-    color: var(--accent);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   MESSAGES
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.error,
-.success {
-    padding: 14px 16px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: none;
-    font-size: 13px;
-    font-weight: 500;
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.error {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.08) 100%);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    color: #b91c1c;
-}
-
-.success {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.08) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    color: #065f46;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   PREVIEW SECTION
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.preview-section {
-    display: none;
-}
-
-.preview-section h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 24px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.preview-comparison {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-}
-
-@media (max-width: 640px) {
-    .preview-comparison {
-        grid-template-columns: 1fr;
-    }
-}
-
-.preview-column {
-    background: var(--bg-light);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 24px;
-    transition: all 0.2s ease;
-}
-
-.preview-column:hover {
-    border-color: var(--accent-light);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
-}
-
-.preview-column h4 {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 18px;
-}
-
-.preview-item {
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 16px;
-}
-
-.preview-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-}
-
-.preview-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    letter-spacing: 0.4px;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   OUTPUT SECTION
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.output-section {
-    display: none;
-}
-
-.output-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    gap: 16px;
-    flex-wrap: wrap;
-}
-
-.output-header h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0;
-}
-
-.copy-btn {
-    background: var(--accent);
-    color: white;
-    padding: 10px 16px;
-    font-size: 13px;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-}
-
-.copy-btn:hover {
-    background: #2563eb;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-.copy-feedback {
-    color: var(--success);
-    font-size: 13px;
-    font-weight: 600;
-    display: none;
-    animation: fadeInOut 2s ease-in-out;
-}
-
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
-}
-
-.output-code {
-    background: var(--primary);
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 24px;
-    overflow-x: auto;
-    border: 1px solid rgba(30, 41, 59, 0.6);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.code-content {
-    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.8;
-    color: #e2e8f0;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    margin: 0;
-    letter-spacing: 0.3px;
-}
-
-.output-info {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(96, 165, 250, 0.06) 100%);
-    border: 1px solid rgba(59, 130, 246, 0.15);
-    border-left: 3px solid var(--accent);
-    padding: 16px 18px;
-    border-radius: 8px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    font-weight: 500;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   TOKEN TABLE
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.token-table-section {
-    display: none;
-}
-
-.token-table-section h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-}
-
-table thead {
-    background: var(--bg-light);
-    border: 1px solid var(--border);
-}
-
-table th {
-    padding: 14px 16px;
-    text-align: left;
-    font-weight: 700;
-    color: var(--text-primary);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    border-bottom: 1.5px solid var(--border);
-}
-
-table td {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-table tbody tr {
-    transition: background 0.2s ease;
-}
-
-table tbody tr:hover {
-    background: var(--bg-light);
-}
-
-table strong {
-    color: var(--accent);
-    font-weight: 700;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   ANIMATIONS
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.section-show {
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   FOOTER
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-footer {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-top: 80px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
-    font-size: 13px;
-    font-weight: 500;
-}
-
-footer a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
-}
-
-footer a:hover {
-    color: var(--accent-light);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   DARK MODE
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Dark Mode - Claude.ai Theme */
-body.dark-mode {
-    --primary: #ffffff;
-    --secondary: #f5f5f5;
-    --accent: #5b9fff;
-    --accent-dark: #7cadf5;
-    --text-primary: #ececf1;
-    --text-secondary: #9299a4;
-    --border: #3f3f46;
-    --bg: #1a1a1a;
-    --bg-alt: #262626;
-    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
-    color: var(--text-primary);
-}
-
-body.dark-mode .card {
-    background: var(--bg);
-    border-color: var(--border);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 4px 12px rgba(91, 159, 255, 0.1);
-}
-
-body.dark-mode .card h2 {
-    color: var(--text-primary);
-}
-
-body.dark-mode .form-group label {
-    color: var(--text-primary);
-}
-
-body.dark-mode .label-hint {
-    color: var(--text-secondary);
-}
-
-body.dark-mode input[type="number"],
-body.dark-mode select {
-    background: var(--bg-alt);
-    border-color: var(--border);
-    color: var(--text-primary);
-}
-
-body.dark-mode input[type="number"]:hover,
-body.dark-mode select:hover {
-    background: #1e293b;
-    border-color: #60a5fa;
-}
-
-body.dark-mode input[type="number"]:focus,
-body.dark-mode select:focus {
-    background: #1e293b;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-
-body.dark-mode .dark-mode-btn,
-body.dark-mode .root-font-selector select {
-    background: #1e293b;
-    border-color: #334155;
-    color: #f1f5f9;
-}
-
-body.dark-mode .dark-mode-btn:hover {
-    background: #3b82f6;
-    border-color: #3b82f6;
-}
-
-body.dark-mode .btn-secondary {
-    background: #1e293b;
-    color: #f1f5f9;
-    border-color: #334155;
-}
-
-body.dark-mode .btn-secondary:hover {
-    background: #334155;
-    border-color: #3b82f6;
-    color: #60a5fa;
-}
-
-body.dark-mode .local-storage-info {
-    background: rgba(16, 185, 129, 0.1);
-    border-color: rgba(16, 185, 129, 0.25);
-    color: #86efac;
-}
-
-body.dark-mode .preview-column {
-    background: #0f172a;
-    border-color: #334155;
-}
-
-body.dark-mode .preview-column:hover {
-    border-color: #60a5fa;
-}
-
-body.dark-mode .preview-column h4 {
-    color: #cbd5e0;
-}
-
-body.dark-mode .preview-label {
-    color: #94a3b8;
-}
-
-body.dark-mode .preview-item {
-    border-bottom-color: #334155;
-}
-
-body.dark-mode .error {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
-}
-
-body.dark-mode .success {
-    background: rgba(16, 185, 129, 0.15);
-    border-color: rgba(16, 185, 129, 0.3);
-    color: #86efac;
-}
-
-body.dark-mode .output-info {
-    background: rgba(59, 130, 246, 0.12);
-    border-color: rgba(59, 130, 246, 0.2);
-    color: #cbd5e0;
-}
-
-body.dark-mode table thead {
-    background: #0f172a;
-    border-color: #334155;
-}
-
-body.dark-mode table th {
-    color: #e2e8f0;
-    border-bottom-color: #334155;
-}
-
-body.dark-mode table td {
-    border-bottom-color: #334155;
-    color: #cbd5e0;
-}
-
-body.dark-mode table tbody tr:hover {
-    background: #1e293b;
-}
-
-body.dark-mode footer {
-    border-top-color: #334155;
-    color: #94a3b8;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   RESPONSIVE & ACCESSIBILITY
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-@media (max-width: 768px) {
-    body {
-        padding: 24px 16px;
-    }
-
-    header {
-        margin-bottom: 40px;
-    }
-
-    header h1 {
-        font-size: 24px;
-    }
-
-    .card {
-        padding: 24px;
-    }
-
-    .container {
-        gap: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 16px 12px;
-    }
-
-    header h1 {
-        font-size: 20px;
-    }
-
-    .card {
-        padding: 20px;
-    }
-
-    .form-grid {
-        gap: 16px;
-        margin-bottom: 20px;
-    }
-
-    .button-group {
-        gap: 12px;
-        margin-top: 24px;
-    }
-}
-
-/* Focus visible for keyboard navigation */
-:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
-
-button:focus-visible {
-    outline-offset: 0;
-}
-
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --accent: #3b82f6;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        body.dark-mode {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #262626;
+            --text-primary: #ececf1;
+            --text-secondary: #9299a4;
+            --accent: #5b9fff;
+            --border: #3f3f46;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem;
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .dark-mode-toggle {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .dark-mode-toggle:hover {
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .output-section {
+            margin-bottom: 2rem;
+        }
+
+        .output-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .output-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .output-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            padding: 0.5rem 1rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+
+        pre {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        code {
+            color: var(--text-primary);
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+
+        .preview {
+            margin-top: 2rem;
+        }
+
+        .preview h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .preview-item {
+            padding: 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .output-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper">
+    <div class="container">
         <header>
-            <div class="header-top">
-                <div class="root-font-selector">
-                    <label>Root Font Size:</label>
-                    <select id="rootFontSize">
-                        <option value="16">100% (1rem = 16px)</option>
-                        <option value="10">62.5% (1rem = 10px)</option>
-                    </select>
-                </div>
-                <button id="darkModeToggle" class="dark-mode-btn">Dark Mode</button>
+            <div>
+                <h1>Design System Token Generator</h1>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">Generate Typography, Spacing, and Gap tokens</p>
             </div>
-            <h1>⚡ Typography Dashboard</h1>
-            <p>Generate hardcoded typography CSS values instantly</p>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" id="darkModeToggle">Toggle Dark Mode</button>
+            </div>
         </header>
 
-        <div class="container">
-            <div class="row-top">
-                <!-- Left Panel: Controls -->
-                <div class="card">
-                <h2>Control Variables</h2>
-
-                <div class="local-storage-info">
-                    💾 Your values are automatically saved to your browser
+        <div class="grid">
+            <div class="card">
+                <h2>Configuration</h2>
+                
+                <div class="form-group">
+                    <label>Viewport Min (px)</label>
+                    <input type="number" id="viewportMin" value="320">
                 </div>
 
-                <div id="error" class="error"></div>
-                <div id="success" class="success"></div>
-
-                <form id="typographyForm">
-                    <!-- Viewport Section -->
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text">Min Viewport</span>
-                                <span class="label-hint"><span class="viewport-display">320</span>px</span>
-                            </label>
-                            <input type="number" id="viewportMin" name="viewportMin" value="320" step="10" min="200" max="600">
-                        </div>
-
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text">Max Viewport</span>
-                                <span class="label-hint"><span class="viewport-display">1440</span>px</span>
-                            </label>
-                            <input type="number" id="viewportMax" name="viewportMax" value="1440" step="10" min="800" max="2560">
-                        </div>
-                    </div>
-
-                    <!-- Type Base Section -->
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text">Type Base Min</span>
-                                <span class="label-hint">Mobile (rem)</span>
-                            </label>
-                            <input type="number" id="typeBaseMin" name="typeBaseMin" value="1.4" step="0.1" min="0.8" max="3">
-                        </div>
-
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text">Type Base Max</span>
-                                <span class="label-hint">Desktop (rem)</span>
-                            </label>
-                            <input type="number" id="typeBaseMax" name="typeBaseMax" value="1.6" step="0.1" min="0.8" max="3">
-                        </div>
-                    </div>
-
-                    <!-- Type Ratio Section -->
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text">Type Ratio Mobile</span>
-                                <span class="label-hint">Scaling step</span>
-                            </label>
-                            <select id="typeRatioMobileSelect">
-                                <option value="1.067">Minor Second (1.067)</option>
-                                <option value="1.125" selected>Major Second (1.125)</option>
-                                <option value="1.200">Minor Third (1.200)</option>
-                                <option value="1.250">Major Third (1.250)</option>
-                                <option value="1.333">Perfect Fourth (1.333)</option>
-                                <option value="1.414">Augmented Fourth (1.414)</option>
-                                <option value="1.500">Perfect Fifth (1.500)</option>
-                                <option value="1.618">Golden Ratio (1.618)</option>
-                                <option value="custom">Custom Value</option>
-                            </select>
-                            <input type="number" id="typeRatioMobileCustom" name="typeRatioMobile" value="1.125" step="0.01" min="1.0" max="2" style="display: none; margin-top: 8px;">
-                        </div>
-
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text">Type Ratio Desktop</span>
-                                <span class="label-hint">Scaling step</span>
-                            </label>
-                            <select id="typeRatioDesktopSelect">
-                                <option value="1.067">Minor Second (1.067)</option>
-                                <option value="1.125">Major Second (1.125)</option>
-                                <option value="1.200">Minor Third (1.200)</option>
-                                <option value="1.250">Major Third (1.250)</option>
-                                <option value="1.333">Perfect Fourth (1.333)</option>
-                                <option value="1.414">Augmented Fourth (1.414)</option>
-                                <option value="1.500">Perfect Fifth (1.500)</option>
-                                <option value="1.618">Golden Ratio (1.618)</option>
-                                <option value="custom">Custom Value</option>
-                            </select>
-                            <input type="number" id="typeRatioDesktopCustom" name="typeRatioDesktop" value="1.2" step="0.01" min="1.0" max="2" style="display: none; margin-top: 8px;">
-                        </div>
-                    </div>
-
-                    <div class="button-group">
-                        <button type="button" id="generateBtn" class="btn-primary">Generate CSS</button>
-                        <button type="button" id="resetBtn" class="btn-secondary">Reset Default</button>
-                    </div>
-                </form>
+                <div class="form-group">
+                    <label>Viewport Max (px)</label>
+                    <input type="number" id="viewportMax" value="1440">
                 </div>
 
-                <!-- Right Panel: Preview -->
-                <div class="card">
-                    <!-- Preview Section -->
-                    <div id="previewSection" class="preview-section">
-                    <h2>Preview</h2>
-                    <div class="preview-comparison">
-                        <div class="preview-column">
-                            <h4>Before</h4>
-                            <div id="beforePreview"></div>
-                        </div>
-                        <div class="preview-column">
-                            <h4>After</h4>
-                            <div id="afterPreview"></div>
-                        </div>
-                    </div>
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+                <h3 style="margin-bottom: 1rem;">Typography</h3>
+                
+                <div class="form-group">
+                    <label>Base Size Min (rem)</label>
+                    <input type="number" id="typeBaseMin" value="1.4" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Base Size Max (rem)</label>
+                    <input type="number" id="typeBaseMax" value="1.6" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Ratio Mobile</label>
+                    <input type="number" id="typeRatioMobile" value="1.125" step="0.001">
+                </div>
+
+                <div class="form-group">
+                    <label>Ratio Desktop</label>
+                    <input type="number" id="typeRatioDesktop" value="1.2" step="0.001">
+                </div>
+
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+                <h3 style="margin-bottom: 1rem;">Spacing</h3>
+
+                <div class="form-group">
+                    <label>Base Size Min (rem)</label>
+                    <input type="number" id="spaceBaseMin" value="0.5" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Base Size Max (rem)</label>
+                    <input type="number" id="spaceBaseMax" value="1.0" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Ratio</label>
+                    <input type="number" id="spaceRatio" value="1.333" step="0.001">
+                </div>
+
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+                <h3 style="margin-bottom: 1rem;">Gaps</h3>
+
+                <div class="form-group">
+                    <label>Base Size Min (rem)</label>
+                    <input type="number" id="gapBaseMin" value="0.75" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Base Size Max (rem)</label>
+                    <input type="number" id="gapBaseMax" value="1.5" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Ratio</label>
+                    <input type="number" id="gapRatio" value="1.333" step="0.001">
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" id="generateBtn">Generate All Tokens</button>
+                    <button class="btn-secondary" id="resetBtn">Reset Defaults</button>
                 </div>
             </div>
-            <!-- End row-top -->
 
-            <div class="row-bottom">
-                <!-- Left: CSS Output -->
-                <div class="card">
-                    <!-- Output Section -->
-                    <div id="outputSection" class="output-section">
-                    <div class="output-header">
-                        <h3>Generated CSS</h3>
-                        <button class="copy-btn" id="copyBtn">Copy CSS</button>
-                        <span id="copyFeedback" class="copy-feedback">✓ Copied!</span>
-                    </div>
-                    <div class="output-code">
-                        <div id="cssOutput" class="code-content"></div>
-                    </div>
-                    <div class="output-info">
-                        <p>✨ Copy the CSS above and paste it in your main styles</p>
-                    </div>
-                </div>
-                </div>
-
-                <!-- Right: Token Table -->
-                <div class="card">
-                    <!-- Token Table -->
-                    <div id="tokenTableSection" class="token-table-section">
-                    <h3>Token Sizes</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Token</th>
-                                <th>Mobile</th>
-                                <th>Desktop</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tokenTableBody"></tbody>
-                    </table>
+            <div class="card">
+                <h2>Preview</h2>
+                <div id="previewContainer">
+                    <p style="color: var(--text-secondary);">Click "Generate All Tokens" to see preview</p>
                 </div>
             </div>
         </div>
 
-        <footer>
-            <p>🚀 Typography Dashboard v3.0 | <a href="https://alifawad.com" target="_blank">Visit Portfolio</a></p>
-        </footer>
+        <div class="output-section">
+            <div class="output-grid">
+                <div class="output-card">
+                    <h3>
+                        Typography CSS
+                        <button class="copy-btn" id="copyTypography">Copy</button>
+                    </h3>
+                    <pre><code id="typographyOutput">/* Click Generate to see output */</code></pre>
+                </div>
+
+                <div class="output-card">
+                    <h3>
+                        Spacing CSS
+                        <button class="copy-btn" id="copySpacing">Copy</button>
+                    </h3>
+                    <pre><code id="spacingOutput">/* Click Generate to see output */</code></pre>
+                </div>
+
+                <div class="output-card">
+                    <h3>
+                        Gap CSS
+                        <button class="copy-btn" id="copyGap">Copy</button>
+                    </h3>
+                    <pre><code id="gapOutput">/* Click Generate to see output */</code></pre>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="calculator.js"></script>
-    <script src="storage.js"></script>
-    <script src="dashboard.js"></script>
+    <script>
+        // Token Generator Class
+        class TokenGenerator {
+            generateTypography(config) {
+                const tokens = [
+                    'body-xs', 'body-s', 'body-m', 'body-l', 'body-xl',
+                    'title-6', 'title-5', 'title-4', 'title-3', 'title-2', 'title-1'
+                ];
+                
+                const powers = [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8];
+                
+                const minValues = tokens.map((token, i) => 
+                    config.typeBaseMin * Math.pow(config.typeRatioMobile, powers[i])
+                );
+                
+                const maxValues = tokens.map((token, i) => 
+                    config.typeBaseMax * Math.pow(config.typeRatioDesktop, powers[i])
+                );
+                
+                return this.generateClampCSS(tokens, minValues, maxValues, config.viewportMin, config.viewportMax);
+            }
+
+            generateSpacing(config) {
+                const tokens = ['space-xs', 'space-s', 'space-m', 'space-l', 'space-xl'];
+                const powers = [-1, 0, 1, 2, 3];
+                
+                const minValues = tokens.map((token, i) => 
+                    config.spaceBaseMin * Math.pow(config.spaceRatio, powers[i])
+                );
+                
+                const maxValues = tokens.map((token, i) => 
+                    config.spaceBaseMax * Math.pow(config.spaceRatio, powers[i])
+                );
+                
+                return this.generateClampCSS(tokens, minValues, maxValues, config.viewportMin, config.viewportMax);
+            }
+
+            generateGaps(config) {
+                const tokens = ['gap-xs', 'gap-s', 'gap-m', 'gap-l', 'gap-xl'];
+                const powers = [-1, 0, 1, 2, 3];
+                
+                const minValues = tokens.map((token, i) => 
+                    config.gapBaseMin * Math.pow(config.gapRatio, powers[i])
+                );
+                
+                const maxValues = tokens.map((token, i) => 
+                    config.gapBaseMax * Math.pow(config.gapRatio, powers[i])
+                );
+                
+                return this.generateClampCSS(tokens, minValues, maxValues, config.viewportMin, config.viewportMax);
+            }
+
+            generateClampCSS(tokens, minValues, maxValues, viewportMin, viewportMax) {
+                let css = ':root {\n';
+                
+                tokens.forEach((token, i) => {
+                    const min = minValues[i];
+                    const max = maxValues[i];
+                    const slope = (max - min) / (viewportMax - viewportMin);
+                    const intercept = min - slope * viewportMin;
+                    
+                    const minRem = min.toFixed(3);
+                    const maxRem = max.toFixed(3);
+                    const vwValue = (slope * 100).toFixed(3);
+                    const interceptRem = intercept.toFixed(3);
+                    
+                    css += `    --${token}: clamp(${minRem}rem, ${vwValue}vw + ${interceptRem}rem, ${maxRem}rem);\n`;
+                });
+                
+                css += '}';
+                return css;
+            }
+        }
+
+        // UI Controller
+        class DashboardUI {
+            constructor() {
+                this.generator = new TokenGenerator();
+                this.initElements();
+                this.loadSavedValues();
+                this.attachEventListeners();
+                this.initDarkMode();
+            }
+
+            initElements() {
+                this.elements = {
+                    viewportMin: document.getElementById('viewportMin'),
+                    viewportMax: document.getElementById('viewportMax'),
+                    typeBaseMin: document.getElementById('typeBaseMin'),
+                    typeBaseMax: document.getElementById('typeBaseMax'),
+                    typeRatioMobile: document.getElementById('typeRatioMobile'),
+                    typeRatioDesktop: document.getElementById('typeRatioDesktop'),
+                    spaceBaseMin: document.getElementById('spaceBaseMin'),
+                    spaceBaseMax: document.getElementById('spaceBaseMax'),
+                    spaceRatio: document.getElementById('spaceRatio'),
+                    gapBaseMin: document.getElementById('gapBaseMin'),
+                    gapBaseMax: document.getElementById('gapBaseMax'),
+                    gapRatio: document.getElementById('gapRatio'),
+                    generateBtn: document.getElementById('generateBtn'),
+                    resetBtn: document.getElementById('resetBtn'),
+                    typographyOutput: document.getElementById('typographyOutput'),
+                    spacingOutput: document.getElementById('spacingOutput'),
+                    gapOutput: document.getElementById('gapOutput'),
+                    previewContainer: document.getElementById('previewContainer'),
+                    copyTypography: document.getElementById('copyTypography'),
+                    copySpacing: document.getElementById('copySpacing'),
+                    copyGap: document.getElementById('copyGap'),
+                    darkModeToggle: document.getElementById('darkModeToggle')
+                };
+            }
+
+            attachEventListeners() {
+                this.elements.generateBtn.addEventListener('click', () => this.generate());
+                this.elements.resetBtn.addEventListener('click', () => this.reset());
+                this.elements.copyTypography.addEventListener('click', () => this.copy('typography'));
+                this.elements.copySpacing.addEventListener('click', () => this.copy('spacing'));
+                this.elements.copyGap.addEventListener('click', () => this.copy('gap'));
+            }
+
+            generate() {
+                const config = {
+                    viewportMin: parseFloat(this.elements.viewportMin.value),
+                    viewportMax: parseFloat(this.elements.viewportMax.value),
+                    typeBaseMin: parseFloat(this.elements.typeBaseMin.value),
+                    typeBaseMax: parseFloat(this.elements.typeBaseMax.value),
+                    typeRatioMobile: parseFloat(this.elements.typeRatioMobile.value),
+                    typeRatioDesktop: parseFloat(this.elements.typeRatioDesktop.value),
+                    spaceBaseMin: parseFloat(this.elements.spaceBaseMin.value),
+                    spaceBaseMax: parseFloat(this.elements.spaceBaseMax.value),
+                    spaceRatio: parseFloat(this.elements.spaceRatio.value),
+                    gapBaseMin: parseFloat(this.elements.gapBaseMin.value),
+                    gapBaseMax: parseFloat(this.elements.gapBaseMax.value),
+                    gapRatio: parseFloat(this.elements.gapRatio.value)
+                };
+
+                // Generate all tokens
+                const typography = this.generator.generateTypography(config);
+                const spacing = this.generator.generateSpacing(config);
+                const gaps = this.generator.generateGaps(config);
+
+                // Update outputs
+                this.elements.typographyOutput.textContent = typography;
+                this.elements.spacingOutput.textContent = spacing;
+                this.elements.gapOutput.textContent = gaps;
+
+                // Update preview
+                this.updatePreview(config);
+
+                // Save to localStorage
+                this.saveValues(config);
+            }
+
+            updatePreview(config) {
+                let html = '<h3>Typography Preview</h3>';
+                const typographyTokens = ['body-xs', 'body-s', 'body-m', 'body-l', 'body-xl', 'title-6', 'title-5', 'title-4', 'title-3', 'title-2', 'title-1'];
+                typographyTokens.forEach(token => {
+                    html += `<div class="preview-item" style="font-size: var(--${token});">${token}</div>`;
+                });
+
+                html += '<h3 style="margin-top: 2rem;">Spacing Preview</h3>';
+                const spacingTokens = ['space-xs', 'space-s', 'space-m', 'space-l', 'space-xl'];
+                spacingTokens.forEach(token => {
+                    html += `<div class="preview-item" style="padding: var(--${token}); background: var(--accent); color: white; margin-bottom: 0.5rem;">${token}</div>`;
+                });
+
+                html += '<h3 style="margin-top: 2rem;">Gap Preview</h3>';
+                html += '<div style="display: flex; flex-direction: column; gap: var(--gap-xs);">';
+                const gapTokens = ['gap-xs', 'gap-s', 'gap-m', 'gap-l', 'gap-xl'];
+                gapTokens.forEach(token => {
+                    html += `<div class="preview-item" style="background: var(--success); color: white;">${token}</div>`;
+                });
+                html += '</div>';
+
+                this.elements.previewContainer.innerHTML = html;
+
+                // Apply generated CSS to preview
+                const style = document.createElement('style');
+                style.textContent = `
+                    ${this.generator.generateTypography(config)}
+                    ${this.generator.generateSpacing(config)}
+                    ${this.generator.generateGaps(config)}
+                `;
+                document.head.appendChild(style);
+            }
+
+            copy(type) {
+                let text;
+                if (type === 'typography') text = this.elements.typographyOutput.textContent;
+                if (type === 'spacing') text = this.elements.spacingOutput.textContent;
+                if (type === 'gap') text = this.elements.gapOutput.textContent;
+
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = type === 'typography' ? this.elements.copyTypography :
+                                type === 'spacing' ? this.elements.copySpacing :
+                                this.elements.copyGap;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = 'Copy', 2000);
+                });
+            }
+
+            reset() {
+                const defaults = {
+                    viewportMin: 320,
+                    viewportMax: 1440,
+                    typeBaseMin: 1.4,
+                    typeBaseMax: 1.6,
+                    typeRatioMobile: 1.125,
+                    typeRatioDesktop: 1.2,
+                    spaceBaseMin: 0.5,
+                    spaceBaseMax: 1.0,
+                    spaceRatio: 1.333,
+                    gapBaseMin: 0.75,
+                    gapBaseMax: 1.5,
+                    gapRatio: 1.333
+                };
+
+                Object.keys(defaults).forEach(key => {
+                    if (this.elements[key]) {
+                        this.elements[key].value = defaults[key];
+                    }
+                });
+
+                localStorage.removeItem('tokenConfig');
+                this.generate();
+            }
+
+            saveValues(config) {
+                localStorage.setItem('tokenConfig', JSON.stringify(config));
+            }
+
+            loadSavedValues() {
+                const saved = localStorage.getItem('tokenConfig');
+                if (saved) {
+                    const config = JSON.parse(saved);
+                    Object.keys(config).forEach(key => {
+                        if (this.elements[key]) {
+                            this.elements[key].value = config[key];
+                        }
+                    });
+                    this.generate();
+                }
+            }
+
+            initDarkMode() {
+                const isDark = localStorage.getItem('darkMode') === 'true';
+                if (isDark) {
+                    document.body.classList.add('dark-mode');
+                }
+
+                this.elements.darkModeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+                });
+            }
+        }
+
+        // Initialize
+        const dashboard = new DashboardUI();
+    </script>
 </body>
 </html>
