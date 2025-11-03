@@ -1,296 +1,423 @@
-class Dashboard {
+/**
+ * Dashboard UI Controller
+ * Manages all UI interactions, events, and preview updates
+ */
+
+class DashboardUI {
     constructor() {
-        this.form = document.getElementById('typographyForm');
-        this.generateBtn = document.getElementById('generateBtn');
-        this.resetBtn = document.getElementById('resetBtn');
-        this.copyBtn = document.getElementById('copyBtn');
-        this.rootFontSizeSelect = document.getElementById('rootFontSize');
-        this.darkModeToggle = document.getElementById('darkModeToggle');
+        this.generator = new TokenGenerator();
+        this.storage = new StorageManager();
+        this.currentViewport = 320;
+        this.generatedData = null;
+        
+        this.initElements();
+        this.loadSavedValues();
+        this.attachEventListeners();
+        this.initDarkMode();
+    }
 
-        this.previewSection = document.getElementById('previewSection');
-        this.outputSection = document.getElementById('outputSection');
-        this.tokenTableSection = document.getElementById('tokenTableSection');
+    /**
+     * Initialize all DOM element references
+     */
+    initElements() {
+        this.elements = {
+            // Form inputs
+            viewportMin: document.getElementById('viewportMin'),
+            viewportMax: document.getElementById('viewportMax'),
+            typeBaseMin: document.getElementById('typeBaseMin'),
+            typeBaseMax: document.getElementById('typeBaseMax'),
+            typeRatioMobile: document.getElementById('typeRatioMobile'),
+            typeRatioDesktop: document.getElementById('typeRatioDesktop'),
+            spaceBaseMin: document.getElementById('spaceBaseMin'),
+            spaceBaseMax: document.getElementById('spaceBaseMax'),
+            spaceRatio: document.getElementById('spaceRatio'),
+            gapBaseMin: document.getElementById('gapBaseMin'),
+            gapBaseMax: document.getElementById('gapBaseMax'),
+            gapRatio: document.getElementById('gapRatio'),
+            
+            // Root font size radios
+            rootFont100: document.getElementById('rootFont100'),
+            rootFont62: document.getElementById('rootFont62'),
+            
+            // Buttons
+            generateBtn: document.getElementById('generateBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            copyTypography: document.getElementById('copyTypography'),
+            copySpacing: document.getElementById('copySpacing'),
+            copyGap: document.getElementById('copyGap'),
+            darkModeToggle: document.getElementById('darkModeToggle'),
+            darkModeIcon: document.getElementById('darkModeIcon'),
+            
+            // Output areas
+            typographyOutput: document.getElementById('typographyOutput'),
+            spacingOutput: document.getElementById('spacingOutput'),
+            gapOutput: document.getElementById('gapOutput'),
+            
+            // Preview areas
+            typographyPreview: document.getElementById('typographyPreview'),
+            spacingPreview: document.getElementById('spacingPreview'),
+            gapPreview: document.getElementById('gapPreview')
+        };
+    }
 
-        this.cssOutput = document.getElementById('cssOutput');
-        this.copyFeedback = document.getElementById('copyFeedback');
-        this.viewportMinInput = document.getElementById('viewportMin');
-        this.viewportMaxInput = document.getElementById('viewportMax');
+    /**
+     * Attach all event listeners
+     */
+    attachEventListeners() {
+        // Button events
+        this.elements.generateBtn.addEventListener('click', () => this.generate());
+        this.elements.resetBtn.addEventListener('click', () => this.reset());
+        this.elements.copyTypography.addEventListener('click', () => this.copy('typography'));
+        this.elements.copySpacing.addEventListener('click', () => this.copy('spacing'));
+        this.elements.copyGap.addEventListener('click', () => this.copy('gap'));
 
-        // Ratio selects and custom inputs
-        this.typeRatioMobileSelect = document.getElementById('typeRatioMobileSelect');
-        this.typeRatioMobileCustom = document.getElementById('typeRatioMobileCustom');
-        this.typeRatioDesktopSelect = document.getElementById('typeRatioDesktopSelect');
-        this.typeRatioDesktopCustom = document.getElementById('typeRatioDesktopCustom');
+        // Preview tab switching
+        document.querySelectorAll('.preview-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => this.switchPreviewTab(e.target.dataset.tab));
+        });
 
-        this.tokenLabels = {
-            'body-xs': 'Extra Small',
-            'body-s': 'Small',
-            'body-m': 'Medium',
-            'body-l': 'Large',
-            'body-xl': 'Extra Large',
-            'title-6': 'Title 6',
-            'title-5': 'Title 5',
-            'title-4': 'Title 4',
-            'title-3': 'Title 3',
-            'title-2': 'Title 2',
-            'title-1': 'Title 1'
+        // Viewport toggle
+        document.querySelectorAll('.viewport-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.switchViewport(e.target.dataset.viewport));
+        });
+
+        // Real-time generation on input change
+        const inputs = [
+            this.elements.viewportMin, this.elements.viewportMax,
+            this.elements.typeBaseMin, this.elements.typeBaseMax,
+            this.elements.typeRatioMobile, this.elements.typeRatioDesktop,
+            this.elements.spaceBaseMin, this.elements.spaceBaseMax, this.elements.spaceRatio,
+            this.elements.gapBaseMin, this.elements.gapBaseMax, this.elements.gapRatio
+        ];
+
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (this.generatedData) {
+                    this.generate();
+                }
+            });
+        });
+
+        // Root font size change
+        [this.elements.rootFont100, this.elements.rootFont62].forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (this.generatedData) {
+                    this.generate();
+                }
+            });
+        });
+    }
+
+    /**
+     * Switch between preview tabs
+     * @param {String} tab - Tab name (typography, spacing, gaps)
+     */
+    switchPreviewTab(tab) {
+        // Update tab buttons
+        document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+        // Update content visibility
+        document.querySelectorAll('.preview-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(`${tab}Preview`).classList.add('active');
+    }
+
+    /**
+     * Switch viewport size for preview
+     * @param {String} viewport - Viewport name (mobile, tablet, desktop)
+     */
+    switchViewport(viewport) {
+        // Update viewport buttons
+        document.querySelectorAll('.viewport-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`[data-viewport="${viewport}"]`).classList.add('active');
+
+        // Set viewport width
+        const viewportMap = {
+            mobile: 320,
+            tablet: 768,
+            desktop: 1440
         };
 
-        this.init();
-    }
+        this.currentViewport = viewportMap[viewport];
 
-    init() {
-        this.loadFromStorage();
-        this.loadDarkMode();
-        this.bindEvents();
-        this.setupRatioSelects();
-    }
-
-    bindEvents() {
-        this.generateBtn.addEventListener('click', () => this.generate());
-        this.resetBtn.addEventListener('click', () => this.reset());
-        this.copyBtn.addEventListener('click', () => this.copy());
-        this.rootFontSizeSelect.addEventListener('change', () => this.handleRootFontSizeChange());
-        this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
-        this.viewportMinInput.addEventListener('input', () => this.updateViewportDisplay());
-        this.viewportMaxInput.addEventListener('input', () => this.updateViewportDisplay());
-        this.typeRatioMobileSelect.addEventListener('change', () => this.handleMobileRatioChange());
-        this.typeRatioDesktopSelect.addEventListener('change', () => this.handleDesktopRatioChange());
-    }
-
-    setupRatioSelects() {
-        // Set default values from stored data if available
-        const stored = storage.load('values');
-        if (stored) {
-            if (stored.typeRatioMobile && stored.typeRatioMobile !== 1.125) {
-                this.typeRatioMobileSelect.value = 'custom';
-                this.typeRatioMobileCustom.value = stored.typeRatioMobile;
-                this.typeRatioMobileCustom.style.display = 'block';
-            }
-            if (stored.typeRatioDesktop && stored.typeRatioDesktop !== 1.2) {
-                this.typeRatioDesktopSelect.value = 'custom';
-                this.typeRatioDesktopCustom.value = stored.typeRatioDesktop;
-                this.typeRatioDesktopCustom.style.display = 'block';
-            }
+        // Regenerate preview with new viewport
+        if (this.generatedData) {
+            this.updatePreview(this.getConfig(), this.generatedData);
         }
     }
 
-    handleMobileRatioChange() {
-        const value = this.typeRatioMobileSelect.value;
-        if (value === 'custom') {
-            this.typeRatioMobileCustom.style.display = 'block';
-            this.typeRatioMobileCustom.focus();
-        } else {
-            this.typeRatioMobileCustom.style.display = 'none';
-            this.typeRatioMobileCustom.value = value;
-        }
-    }
-
-    handleDesktopRatioChange() {
-        const value = this.typeRatioDesktopSelect.value;
-        if (value === 'custom') {
-            this.typeRatioDesktopCustom.style.display = 'block';
-            this.typeRatioDesktopCustom.focus();
-        } else {
-            this.typeRatioDesktopCustom.style.display = 'none';
-            this.typeRatioDesktopCustom.value = value;
-        }
-    }
-
-    updateViewportDisplay() {
-        const displays = document.querySelectorAll('.viewport-display');
-        if (displays.length >= 2) {
-            displays[0].textContent = this.viewportMinInput.value;
-            displays[1].textContent = this.viewportMaxInput.value;
-        }
-    }
-
-    handleRootFontSizeChange() {
-        this.saveToStorage(this.getFormValues());
-        this.showSuccess('Root font size updated!');
-    }
-
-    toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDarkMode);
-        this.darkModeToggle.textContent = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
-    }
-
-    loadDarkMode() {
-        const isDarkMode = localStorage.getItem('darkMode') === 'true';
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            this.darkModeToggle.textContent = '☀️ Light Mode';
-        }
-    }
-
-    getFormValues() {
-        const typeRatioMobile = this.typeRatioMobileSelect.value === 'custom' 
-            ? parseFloat(this.typeRatioMobileCustom.value)
-            : parseFloat(this.typeRatioMobileSelect.value);
-
-        const typeRatioDesktop = this.typeRatioDesktopSelect.value === 'custom'
-            ? parseFloat(this.typeRatioDesktopCustom.value)
-            : parseFloat(this.typeRatioDesktopSelect.value);
-
+    /**
+     * Get current configuration from form inputs
+     * @returns {Object} - Configuration object
+     */
+    getConfig() {
         return {
-            viewportMin: parseInt(this.viewportMinInput.value),
-            viewportMax: parseInt(this.viewportMaxInput.value),
-            typeBaseMin: parseFloat(document.getElementById('typeBaseMin').value),
-            typeBaseMax: parseFloat(document.getElementById('typeBaseMax').value),
-            typeRatioMobile: typeRatioMobile,
-            typeRatioDesktop: typeRatioDesktop,
-            rootFontSize: parseInt(this.rootFontSizeSelect.value)
+            viewportMin: parseFloat(this.elements.viewportMin.value),
+            viewportMax: parseFloat(this.elements.viewportMax.value),
+            typeBaseMin: parseFloat(this.elements.typeBaseMin.value),
+            typeBaseMax: parseFloat(this.elements.typeBaseMax.value),
+            typeRatioMobile: parseFloat(this.elements.typeRatioMobile.value),
+            typeRatioDesktop: parseFloat(this.elements.typeRatioDesktop.value),
+            spaceBaseMin: parseFloat(this.elements.spaceBaseMin.value),
+            spaceBaseMax: parseFloat(this.elements.spaceBaseMax.value),
+            spaceRatio: parseFloat(this.elements.spaceRatio.value),
+            gapBaseMin: parseFloat(this.elements.gapBaseMin.value),
+            gapBaseMax: parseFloat(this.elements.gapBaseMax.value),
+            gapRatio: parseFloat(this.elements.gapRatio.value),
+            rootFontSize: this.elements.rootFont100.checked ? 16 : 10
         };
     }
 
+    /**
+     * Generate all tokens and update UI
+     */
     generate() {
-        const values = this.getFormValues();
-        const calculator = new TypographyCalculator(values);
-        const css = calculator.generateCss();
+        const config = this.getConfig();
 
-        this.cssOutput.textContent = css;
-        this.outputSection.classList.add('section-show');
-        this.outputSection.style.display = 'block';
+        // Generate all token types
+        const typography = this.generator.generateTypography(config);
+        const spacing = this.generator.generateSpacing(config);
+        const gaps = this.generator.generateGaps(config);
 
-        this.generatePreview(calculator);
-        this.generateTokenTable(calculator);
+        this.generatedData = { typography, spacing, gaps };
 
-        this.saveToStorage(values);
-        this.showSuccess('CSS generated successfully!');
+        // Update CSS outputs
+        this.elements.typographyOutput.textContent = typography.css;
+        this.elements.spacingOutput.textContent = spacing.css;
+        this.elements.gapOutput.textContent = gaps.css;
+
+        // Update preview
+        this.updatePreview(config, this.generatedData);
+
+        // Apply CSS to document for live preview
+        this.applyGeneratedCSS(config, typography, spacing, gaps);
+
+        // Save to localStorage
+        this.storage.saveConfig(config);
     }
 
-    generatePreview(calculator) {
-        const preview = calculator.getPreviewSizes();
-        let beforeHtml = '';
-        let afterHtml = '';
+    /**
+     * Update preview sections with generated tokens
+     * @param {Object} config - Current configuration
+     * @param {Object} data - Generated token data
+     */
+    updatePreview(config, data) {
+        const rootFontSize = config.rootFontSize;
 
-        calculator.tokens.forEach(token => {
-            const size = preview[token];
-            const label = this.tokenLabels[token] || token;
+        // Typography Preview
+        let typographyHTML = '';
+        data.typography.tokens.forEach((token, i) => {
+            const actualSize = this.generator.calculateActualSize(
+                data.typography.minValues[i],
+                data.typography.maxValues[i],
+                config.viewportMin,
+                config.viewportMax,
+                this.currentViewport,
+                rootFontSize
+            );
 
-            beforeHtml += `
-                <div class="preview-item">
+            typographyHTML += `
+                <div class="typography-preview-item">
                     <div class="preview-label">${token}</div>
-                    <div style="font-size: ${size.mobile}px; font-weight: 600; color: #2d3748;">${label}</div>
-                </div>
-            `;
-
-            afterHtml += `
-                <div class="preview-item">
-                    <div class="preview-label">${token}</div>
-                    <div style="font-size: ${size.desktop}px; font-weight: 600; color: #2d3748;">${label}</div>
+                    <div class="preview-text" style="font-size: var(--${token});">
+                        The quick brown fox jumps over the lazy dog
+                    </div>
+                    <div class="preview-specs">
+                        <span>Actual: ${actualSize}px</span>
+                        <span>Min: ${data.typography.minValues[i].toFixed(3)}rem</span>
+                        <span>Max: ${data.typography.maxValues[i].toFixed(3)}rem</span>
+                    </div>
                 </div>
             `;
         });
+        this.elements.typographyPreview.innerHTML = typographyHTML;
 
-        document.getElementById('beforePreview').innerHTML = beforeHtml;
-        document.getElementById('afterPreview').innerHTML = afterHtml;
+        // Spacing Preview
+        let spacingHTML = '';
+        data.spacing.tokens.forEach((token, i) => {
+            const actualSize = this.generator.calculateActualSize(
+                data.spacing.minValues[i],
+                data.spacing.maxValues[i],
+                config.viewportMin,
+                config.viewportMax,
+                this.currentViewport,
+                rootFontSize
+            );
 
-        this.previewSection.classList.add('section-show');
-        this.previewSection.style.display = 'block';
-    }
-
-    generateTokenTable(calculator) {
-        const preview = calculator.getPreviewSizes();
-        let html = '';
-
-        calculator.tokens.forEach(token => {
-            const size = preview[token];
-            html += `
-                <tr>
-                    <td><strong>${token}</strong></td>
-                    <td>${size.mobile}px</td>
-                    <td>${size.desktop}px</td>
-                </tr>
+            spacingHTML += `
+                <div class="spacing-preview-item">
+                    <div class="spacing-inner" style="padding: var(--${token});">
+                        <div>
+                            <div style="font-weight: 700; margin-bottom: 0.25rem;">${token}</div>
+                            <div style="font-size: 0.875rem; opacity: 0.9;">
+                                Padding: ${actualSize}px
+                            </div>
+                        </div>
+                    </div>
+                </div>
             `;
         });
+        this.elements.spacingPreview.innerHTML = spacingHTML;
 
-        document.getElementById('tokenTableBody').innerHTML = html;
-        this.tokenTableSection.classList.add('section-show');
-        this.tokenTableSection.style.display = 'block';
+        // Gap Preview
+        let gapHTML = '';
+        data.gaps.tokens.forEach((token, i) => {
+            const actualSize = this.generator.calculateActualSize(
+                data.gaps.minValues[i],
+                data.gaps.maxValues[i],
+                config.viewportMin,
+                config.viewportMax,
+                this.currentViewport,
+                rootFontSize
+            );
+
+            gapHTML += `
+                <div class="gap-preview-container" style="gap: var(--${token});">
+                    <div style="text-align: center; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.5rem;">
+                        ${token} (Gap: ${actualSize}px)
+                    </div>
+                    <div class="gap-preview-item">Item 1</div>
+                    <div class="gap-preview-item">Item 2</div>
+                    <div class="gap-preview-item">Item 3</div>
+                </div>
+            `;
+        });
+        this.elements.gapPreview.innerHTML = gapHTML;
     }
 
-    copy() {
-        const css = this.cssOutput.textContent;
-        navigator.clipboard.writeText(css).then(() => {
-            this.copyFeedback.style.display = 'inline-block';
+    /**
+     * Apply generated CSS to document for live preview
+     * @param {Object} config - Current configuration
+     * @param {Object} typography - Typography token data
+     * @param {Object} spacing - Spacing token data
+     * @param {Object} gaps - Gap token data
+     */
+    applyGeneratedCSS(config, typography, spacing, gaps) {
+        // Remove old style if exists
+        const oldStyle = document.getElementById('generated-tokens');
+        if (oldStyle) oldStyle.remove();
+
+        // Create and append new style
+        const style = document.createElement('style');
+        style.id = 'generated-tokens';
+        
+        let cssContent = '';
+        
+        // Add root font size if needed
+        if (config.rootFontSize === 10) {
+            cssContent += 'html { font-size: 62.5%; }\n';
+        }
+        
+        // Combine all CSS (remove comments and merge :root declarations)
+        cssContent += typography.css.replace(/\/\*.*?\*\/\n*/g, '') + '\n';
+        cssContent += spacing.css.replace(/\/\*.*?\*\/\n*/g, '').replace(':root {', '') + '\n';
+        cssContent += gaps.css.replace(/\/\*.*?\*\/\n*/g, '').replace(':root {', '');
+        
+        style.textContent = cssContent;
+        document.head.appendChild(style);
+    }
+
+    /**
+     * Copy CSS to clipboard
+     * @param {String} type - Token type (typography, spacing, gap)
+     */
+    copy(type) {
+        let text, btn;
+        
+        if (type === 'typography') {
+            text = this.elements.typographyOutput.textContent;
+            btn = this.elements.copyTypography;
+        } else if (type === 'spacing') {
+            text = this.elements.spacingOutput.textContent;
+            btn = this.elements.copySpacing;
+        } else {
+            text = this.elements.gapOutput.textContent;
+            btn = this.elements.copyGap;
+        }
+
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
             setTimeout(() => {
-                this.copyFeedback.style.display = 'none';
+                btn.textContent = 'Copy';
+                btn.classList.remove('copied');
             }, 2000);
         }).catch(err => {
-            this.showError('Failed to copy to clipboard');
+            console.error('Failed to copy:', err);
         });
     }
 
+    /**
+     * Reset all values to defaults
+     */
     reset() {
-        if (confirm('Reset to default values?')) {
-            document.getElementById('viewportMin').value = 320;
-            document.getElementById('viewportMax').value = 1440;
-            document.getElementById('typeBaseMin').value = 1.4;
-            document.getElementById('typeBaseMax').value = 1.6;
-            this.typeRatioMobileSelect.value = '1.125';
-            this.typeRatioDesktopSelect.value = '1.2';
-            this.typeRatioMobileCustom.style.display = 'none';
-            this.typeRatioDesktopCustom.style.display = 'none';
-            document.getElementById('rootFontSize').value = 16;
+        const defaults = this.storage.getDefaults();
 
-            this.updateViewportDisplay();
+        // Update all form inputs
+        Object.keys(defaults).forEach(key => {
+            if (key === 'rootFontSize') {
+                if (defaults[key] === 10) {
+                    this.elements.rootFont62.checked = true;
+                } else {
+                    this.elements.rootFont100.checked = true;
+                }
+            } else if (this.elements[key]) {
+                this.elements[key].value = defaults[key];
+            }
+        });
 
-            this.previewSection.style.display = 'none';
-            this.outputSection.style.display = 'none';
-            this.tokenTableSection.style.display = 'none';
+        // Clear localStorage
+        this.storage.clearConfig();
+        
+        // Regenerate with defaults
+        this.generate();
+    }
 
-            storage.clear();
-            this.showSuccess('Reset to defaults!');
+    /**
+     * Load saved values from localStorage
+     */
+    loadSavedValues() {
+        const saved = this.storage.loadConfig();
+        
+        if (saved) {
+            Object.keys(saved).forEach(key => {
+                if (key === 'rootFontSize') {
+                    if (saved[key] === 10) {
+                        this.elements.rootFont62.checked = true;
+                    } else {
+                        this.elements.rootFont100.checked = true;
+                    }
+                } else if (this.elements[key]) {
+                    this.elements[key].value = saved[key];
+                }
+            });
+            
+            // Auto-generate with saved values
+            this.generate();
         }
     }
 
-    saveToStorage(values) {
-        storage.save('values', values);
-    }
-
-    loadFromStorage() {
-        const stored = storage.load('values');
-        if (stored) {
-            document.getElementById('viewportMin').value = stored.viewportMin || 320;
-            document.getElementById('viewportMax').value = stored.viewportMax || 1440;
-            document.getElementById('typeBaseMin').value = stored.typeBaseMin || 1.4;
-            document.getElementById('typeBaseMax').value = stored.typeBaseMax || 1.6;
-            document.getElementById('rootFontSize').value = stored.rootFontSize || 16;
-
-            // Handle ratio values
-            if (stored.typeRatioMobile) {
-                this.typeRatioMobileCustom.value = stored.typeRatioMobile;
-            }
-            if (stored.typeRatioDesktop) {
-                this.typeRatioDesktopCustom.value = stored.typeRatioDesktop;
-            }
-
-            this.updateViewportDisplay();
+    /**
+     * Initialize dark mode
+     */
+    initDarkMode() {
+        const isDark = this.storage.loadDarkMode();
+        
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+            this.elements.darkModeIcon.textContent = '☀️';
         }
-    }
 
-    showSuccess(message) {
-        const successEl = document.getElementById('success');
-        successEl.textContent = message;
-        successEl.style.display = 'block';
-        setTimeout(() => {
-            successEl.style.display = 'none';
-        }, 3000);
-    }
-
-    showError(message) {
-        const errorEl = document.getElementById('error');
-        errorEl.textContent = message;
-        errorEl.style.display = 'block';
-        setTimeout(() => {
-            errorEl.style.display = 'none';
-        }, 3000);
+        this.elements.darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            this.elements.darkModeIcon.textContent = isDarkMode ? '☀️' : '🌙';
+            this.storage.saveDarkMode(isDarkMode);
+        });
     }
 }
 
+// Initialize the dashboard when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new Dashboard();
+    const dashboard = new DashboardUI();
 });
