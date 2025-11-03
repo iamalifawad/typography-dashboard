@@ -67,7 +67,7 @@ class TypographyCalculator {
         const minPx = minVal * this.config.rootFontSize;
         const maxPx = maxVal * this.config.rootFontSize;
         
-        // Viewport is already in pixels
+        // Viewport widths in pixels
         const vpMinPx = this.config.viewportMin;
         const vpMaxPx = this.config.viewportMax;
 
@@ -77,15 +77,18 @@ class TypographyCalculator {
         // Calculate the font size range
         const fontSizeRangePx = maxPx - minPx;
         
-        // Calculate vw percentage
+        // Calculate vw percentage: (font size range / viewport range) * 100
         const vwPercent = (fontSizeRangePx / vpRangePx) * 100;
         
-        // Calculate the offset (intercept)
-        const offset = minPx - (vpMinPx / 100) * vwPercent;
+        // Calculate the offset in rem units
+        // offset = minVal - (vpMinPx / 100) * (vwPercent / rootFontSize)
+        // Simplified: minPx - (vpMinPx * vwPercent / 100) converted back to rem
+        const offsetPx = minPx - (vpMinPx * vwPercent / 100);
+        const offsetRem = offsetPx / this.config.rootFontSize;
 
         return {
             vw: vwPercent.toFixed(3),
-            offset: offset.toFixed(3),
+            offset: offsetRem.toFixed(3),
         };
     }
 
